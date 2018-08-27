@@ -26,7 +26,7 @@
             }
 
             .flex-center {
-                align-items: center;
+                align-items: top;
                 display: flex;
                 justify-content: center;
             }
@@ -67,10 +67,9 @@
     <body>
         <div class="flex-center position-ref full-height">
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                <div class="title">
+                    Customer Invitation System
                 </div>
-
                 <div id="app"></div>
             </div>
         </div>

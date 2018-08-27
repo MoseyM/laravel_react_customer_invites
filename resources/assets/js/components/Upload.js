@@ -7,13 +7,10 @@ export default class Upload extends Component {
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-header">Example Component</div>
-
-                            <div className="card-body">
-                                I'm an example component!
-                            </div>
-                        </div>
+                        <form action="/upload" method="post" encType="multipart/form-data">
+                            Input: <input type="file" name="data-file" id="data-file" />
+                            <input type="submit" value="Submit" />
+                        </form>
                     </div>
                 </div>
             </div>
