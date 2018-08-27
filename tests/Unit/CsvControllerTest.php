@@ -21,11 +21,12 @@ class CsvControllerTest extends TestCase
             2024 
         );
         //pass through controller method
-        $badResponse = $this->json('POST','/upload', [
+        $badResponse = $this->post('/upload', [
             'data-file' => $doc,
         ]);
-        //assert correct status is returned
-        $badResponse->assertStatus(422);
+        
+        //assert correct status is returned - redirect because of failed validation
+        $badResponse->assertStatus(302);
 
         //create a test file that is a csv type
         $csv = UploadedFile::fake()->create(
@@ -34,7 +35,7 @@ class CsvControllerTest extends TestCase
         );
 
         //pass through conntroller method
-        $response = $this->json('POST', '/upload', [
+        $response = $this->post('/upload', [
             'data-file' => $csv,
         ]);
         //assert correct status is returned
@@ -55,15 +56,16 @@ class CsvControllerTest extends TestCase
             1068
         );
         //pass through controller method
-        $response = $this->json('POST', '/upload', [
+        $response = $this->post('upload', [
             'data-file' => $csv,
         ]);
-        //assert correct status is reeturned
+        //assert correct status is returned
         $response->assertStatus(200);
         //assert type of returned object
-        $response->assertJson();
+        $this->assertTrue( is_array($response->decodeResponseJson()) );
         //assert returned object has extra attributes
-        $response->seeJsonStructure([
+        
+        $response->assertJsonStructure([
             '*' => [
                 'invite_sent','invite_channel','invite_type'
             ]
