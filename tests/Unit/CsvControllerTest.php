@@ -62,13 +62,6 @@ class CsvControllerTest extends TestCase
         //assert correct status is returned
         $response->assertStatus(200);
         //assert type of returned object
-        $this->assertTrue( is_array($response->decodeResponseJson()) );
-        //assert returned object has extra attributes
-        
-        $response->assertJsonStructure([
-            '*' => [
-                'invite_sent','invite_channel','invite_type'
-            ]
-        ]);
+        $response->assertViewIs('results');
     }
 }
