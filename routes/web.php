@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('upload');
 });
 
 Route::post('/upload', 'CsvController@upload');

@@ -16,10 +16,12 @@ class CsvController extends BaseController
     public function upload(Request $request)
     {
         $request->validate([
-            'data-file' => 'required|file|mimes:csv',
+            'data-file' => 'required|file|mimes:csv,txt',
         ]);
 
-        return $this->parseCsv($request->file('data-file')->path());
+        $parsed = $this->parseCsv($request->file('data-file')->path());
+
+        return view('results', ['data' => $parsed]);
     }
 
     /**
@@ -35,7 +37,7 @@ class CsvController extends BaseController
         //open the file
         if (($handle = fopen($name, 'r')) != false) {
             //read each line but the first row will be the headings
-            while($row = fgetcsv($handle, 1500, ',') != false) {
+            while(($row = fgetcsv($handle, 1500, ',')) != false) {
                 if (is_null($headings)) {
                     $headings = $row;
                 } else {
@@ -43,13 +45,14 @@ class CsvController extends BaseController
                     $unedited = end($dataArr);
                     //add the extra attributes for invitations
                     $unedited['invite_sent'] = false;
-                    $unedited['invite_channel'] = (!is_null($unedited['cust_phone'])) 
-                        ? $unedited['cust_phone'] : $unedited['cust_email'];
+                    $unedited['invite_channel'] = (!empty($unedited['cust_phone'])) 
+                        ? "Phone" : "Email";
                     $unedited['invite_type'] = $unedited['trans_type'];
+                    $dataArr[count($dataArr)-1] = $unedited;
                 }
             }
         }
         
-        return $dataArr;
+        return json_encode($dataArr);
     }
 }
