@@ -6,7 +6,6 @@ class Results extends Component
     constructor(props)
     {
         super(props);
-        console.log(props.data)
         this.state = {
             customers: JSON.parse(props.data)
         }
@@ -24,12 +23,35 @@ class Results extends Component
     }
 
     render() {
+        let headings = Object.keys(this.state.customers[0]);
+        // let showInvite = customer['invite_sent'];
+        let customerData = {};
+        customerData = this.state.customers.forEach(
+            function(customer) {
+                let row=[];
+                if (customer['invite_sent']) {
+                    for(let i=0; i<headings.length;i++) {
+                        row.push(<td>{customer[i]}</td>);
+                    }
+                } else {
+                    for(let i=0; i<headings.indexOf['invite_sent'];i++) {
+                        row.push(<td>{customer[i]}</td>);
+                    }
+                }
+                return <tr>{row}</tr>;
+            });
+
         return (
-           <div>
-           { this.state.customers.map(function(key, customer) {
-                <p>Blah</p>
-           }) }
-           </div>
+           <table>
+                <tbody>
+                    <tr>
+                        {headings.map((key) => <th>{key.replace("_", " ")}</th>)}
+                    </tr>
+                    <tr>
+                        {customerData}
+                    </tr>
+                </tbody>
+           </table>
        )
             
     }
@@ -37,7 +59,6 @@ class Results extends Component
 
 export default Results;
 if (document.getElementById('app')) {
-    console.log(document.getElementById('app'))
     var data = document.getElementById('xyz').innerHTML;
    ReactDOM.render(<Results data={data}/>, document.getElementById('app'));
 }
